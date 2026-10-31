@@ -27,6 +27,11 @@ GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 DEFAULT_READER_MODELS = "gemini-3.5-flash-lite,gemini-3.1-flash-lite,gemini-3-flash-preview,gemini-3.5-flash"
 DEFAULT_PLANNER_MODELS = "gemini-3.6-flash,gemini-3.5-flash,gemini-3-flash-preview,gemini-3.8-flash"
 DEFAULT_MODELS = DEFAULT_PLANNER_MODELS  # legacy name
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+# OpenRouter model ids (override with OPENROUTER_READER_MODELS / OPENROUTER_PLANNER_MODELS). All accept image input.
+DEFAULT_OR_READER_MODELS = "google/gemini-2.5-flash-lite,openai/gpt-4o-mini,google/gemma-3-27b-it:free"
+DEFAULT_OR_PLANNER_MODELS = "google/gemini-2.5-flash,openai/gpt-4o-mini,google/gemma-3-27b-it:free"
+OR_MIN_SPACING = 1.0  # per (model,key); with N keys rotated round-robin the effective rate is N/spacing
 ATTEMPT_TIMEOUT = 25.0
 BREAKER_SECONDS = 90.0        # timeouts, 503, other failures
 BREAKER_429_SECONDS = 20.0    # rate limited: the quota window is short
@@ -76,6 +81,7 @@ def _load_dotenv_once() -> None:
 def _scrub(msg: str) -> str:
     """Remove anything that could look like a key from an error string."""
     msg = re.sub(r"AIza[0-9A-Za-z_\-]{20,}", "[redacted]", msg)
+    msg = re.sub(r"sk-or-[0-9A-Za-z_\-]{10,}", "[redacted]", msg)
     msg = re.sub(r"gsk_[0-9A-Za-z]{20,}", "[redacted]", msg)
     return msg[:300]
 
@@ -119,7 +125,10 @@ class ProviderChain:
     def __init__(self, gemini_key, models: Optional[list[str]] = None, groq_key: Optional[str] = None,
                  groq_model: str = "qwen/qwen3.8-27b", cache: bool = True, client: Optional[httpx.Client] = None,
                  reader_models: Optional[list[str]] = None, planner_models: Optional[list[str]] = None,
-                 min_spacing: Optional[float] = None):
+                 min_spacing: Optional[float] = None, openrouter_keys=None,
+                 or_reader_models: Optional[list[str]] = None, or_planner_models: Optional[list[str]] = None):
+        self._orkeys = [k for k in (openrouter_keys or []) if k]
+        self._or_rr = 0  # round-robin cursor over OpenRouter keys (every call uses the next key)
         keys = [gemini_key] if isinstance(gemini_key, str) else list(gemini_key or [])
         self._gkeys = [k for k in keys if k]
         self._gkey = self._gkeys[0] if self._gkeys else None  # legacy attribute (never logged)
@@ -135,6 +144,10 @@ class ProviderChain:
         self.min_spacing = max(0.0, min_spacing)
         self._by_model: dict[tuple[str, str], _ModelState] = {}
         self.chains: dict[str, list[_ModelState]] = {"reader": [], "planner": []}
+        for role, ms in (("reader", or_reader_models or []), ("planner", or_planner_models or [])):
+            if self._orkeys:
+                for m in ms:
+                    self.chains[role].append(self._state("openrouter", m, role))
         for role, ms in (("reader", reader_models), ("planner", planner_models)):
             if self._gkeys:
                 for m in ms:
@@ -167,13 +180,19 @@ class ProviderChain:
             if k and k not in seen:
                 seen.add(k)
                 uniq.append(k)
+        orkeys = _split(os.environ.get("OPENROUTER_API_KEYS", "")) + [os.environ.get("OPENROUTER_API_KEY") or ""] + \
+            [os.environ.get(f"OPENROUTER_API_KEY_{i}") or "" for i in range(2, 10)]
+        orkeys = list(dict.fromkeys(k for k in orkeys if k))
+        or_reader = _split(os.environ.get("OPENROUTER_READER_MODELS") or DEFAULT_OR_READER_MODELS)
+        or_planner = _split(os.environ.get("OPENROUTER_PLANNER_MODELS") or DEFAULT_OR_PLANNER_MODELS)
         return cls(uniq, planner, os.environ.get("GROQ_API_KEY") or None, os.environ.get("GROQ_MODEL") or "qwen/qwen3.8-27b",
-                   reader_models=reader, planner_models=planner)
+                   reader_models=reader, planner_models=planner, openrouter_keys=orkeys,
+                   or_reader_models=or_reader, or_planner_models=or_planner)
 
     # ---------- health ----------
     def health(self) -> dict:
         if not self.states:
-            return {"configured": False, "providers": [], "message": "AI not configured (no GEMINI_API_KEY / GROQ_API_KEY)"}
+            return {"configured": False, "providers": [], "message": "AI not configured (no OPENROUTER_API_KEYS / GEMINI_API_KEY / GROQ_API_KEY)"}
         now = time.time()
         provs = []
         for s in self.states:
@@ -181,7 +200,7 @@ class ProviderChain:
             provs.append({"name": s.provider, "model": s.model, "healthy": healthy, "role": "+".join(r for r in ROLES if r in s.roles),
                           "last_error": s.last_error or "", "last_latency_ms": s.last_latency_ms})
         any_ok = any(p["healthy"] for p in provs)
-        return {"configured": True, "providers": provs, "keys": len(self._gkeys),
+        return {"configured": True, "providers": provs, "keys": len(self._gkeys) + len(self._orkeys),
                 "message": "AI available" if any_ok else "AI unavailable: every provider/model recently failed (circuit open)"}
 
     # ---------- cache ----------
@@ -300,6 +319,8 @@ class ProviderChain:
 
     # ---------- transport ----------
     def _raw_call(self, st: _ModelState, system, parts, temperature, max_tokens, timeout=None, more=False) -> tuple[str, int, int, str]:
+        if st.provider == "openrouter":
+            return self._openrouter(st, system, parts, temperature, max_tokens, timeout, more)
         if st.provider == "gemini":
             return self._gemini(st, system, parts, temperature, max_tokens, timeout, more)
         return self._groq(st, system, parts, temperature, max_tokens, timeout)
@@ -383,6 +404,79 @@ class ProviderChain:
                 raise ProviderUnavailable("bad response shape")
         self._fail(st, "HTTP 429 after retries", BREAKER_429_SECONDS)
         raise ProviderUnavailable("HTTP 429 after retries")
+
+    def _next_or_key(self) -> int:
+        with self._lock:
+            i = self._or_rr % len(self._orkeys)
+            self._or_rr += 1
+        return i
+
+    def _openrouter(self, st, system, parts, temperature, max_tokens, timeout=None, more=False):
+        """OpenAI-compatible chat call. Keys alternate round-robin per call; 402/429 moves to the next key at once."""
+        tmo = timeout or ATTEMPT_TIMEOUT
+        content: list[dict] = []
+        n_img = 0
+        for p in parts:
+            if "text" in p:
+                content.append({"type": "text", "text": p["text"]})
+            elif "inlineData" in p and p["inlineData"]["mimeType"].startswith("image/") and n_img < 4:
+                n_img += 1
+                content.append({"type": "image_url", "image_url": {"url": f"data:{p['inlineData']['mimeType']};base64,{p['inlineData']['data']}"}})
+        body = {"model": st.model, "temperature": temperature, "max_tokens": max_tokens,
+                "response_format": {"type": "json_object"},
+                "messages": [{"role": "system", "content": system + "\nReply with one JSON object only."},
+                             {"role": "user", "content": content}]}
+        n = len(self._orkeys)
+        kidx = self._next_or_key()
+        tried, plain_retry, waited = 0, False, False
+        while True:
+            headers = {"authorization": f"Bearer {self._orkeys[kidx]}", "content-type": "application/json",
+                       "http-referer": "https://github.com/medhun17/claims-investigator-", "x-title": "Verity"}
+            spacing = self.min_spacing and min(self.min_spacing, OR_MIN_SPACING)
+            if spacing:
+                with self._lock:
+                    now = time.time()
+                    start = max(now, st.next_ok.get(kidx, 0.0))
+                    st.next_ok[kidx] = start + spacing
+                _sleep(start - now)
+            t0 = time.time()
+            try:
+                r = self._client.post(OPENROUTER_URL, json=body, headers=headers, timeout=tmo)
+            except httpx.TimeoutException:
+                self._fail(st, f"timeout after {tmo:.0f}s")
+                raise ProviderUnavailable(f"timeout after {tmo:.0f}s")
+            except httpx.HTTPError as e:
+                self._fail(st, f"transport error {type(e).__name__}")
+                raise ProviderUnavailable(f"transport error {type(e).__name__}")
+            if r.status_code == 400 and "response_format" in body and not plain_retry:
+                body.pop("response_format")  # model without JSON mode: ask in the prompt instead
+                plain_retry = True
+                continue
+            if r.status_code in (401, 402, 429):  # bad key / out of credit / rate limited: try the next key
+                tried += 1
+                if tried < n:
+                    kidx = (kidx + 1) % n
+                    continue
+                if r.status_code == 429 and not waited and not more:
+                    waited = True
+                    _sleep(self._retry_after(r))
+                    tried = 0
+                    continue
+                self._fail(st, f"HTTP {r.status_code} on all {n} keys", BREAKER_429_SECONDS)
+                raise ProviderUnavailable(f"HTTP {r.status_code}")
+            if r.status_code != 200:
+                self._fail(st, f"HTTP {r.status_code}: {_scrub(r.text)}")
+                raise ProviderUnavailable(f"HTTP {r.status_code}")
+            try:
+                j = r.json()
+                ch = (j.get("choices") or [{}])[0]
+                um = j.get("usage") or {}
+                txt = ch.get("message", {}).get("content", "") or ""
+                st.last_latency_ms = int((time.time() - t0) * 1000)
+                return txt, int(um.get("prompt_tokens", 0)), int(um.get("completion_tokens", 0)), ch.get("finish_reason", "") or ""
+            except Exception:
+                self._fail(st, "bad response shape")
+                raise ProviderUnavailable("bad response shape")
 
     def _groq(self, st, system, parts, temperature, max_tokens, timeout=None):
         content: list[dict] = []

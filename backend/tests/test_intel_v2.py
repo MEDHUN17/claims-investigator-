@@ -57,7 +57,7 @@ def test_roles_use_separate_model_chains(tmp_path, monkeypatch):
 
 def test_default_env_chains_and_extra_keys(monkeypatch):
     monkeypatch.setattr(providers, "_load_dotenv_once", lambda: None)
-    for k in ("GEMINI_MODELS", "GEMINI_READER_MODELS", "GEMINI_PLANNER_MODELS", "GROQ_API_KEY", "GEMINI_API_KEYS"):
+    for k in ("GEMINI_MODELS", "GEMINI_READER_MODELS", "GEMINI_PLANNER_MODELS", "GROQ_API_KEY", "GEMINI_API_KEYS", "OPENROUTER_API_KEYS", "OPENROUTER_API_KEY"):
         monkeypatch.delenv(k, raising=False)
     monkeypatch.setenv("GEMINI_API_KEY", "key-one")
     monkeypatch.setenv("GEMINI_API_KEY_2", "key-two")
@@ -521,3 +521,26 @@ def test_baseline_hypotheses_added_when_planner_omits_them(seq_case):
 def test_no_baseline_when_planner_already_supplied_both():
     hs = [{"id": "H-1", "text": "a", "benign": True, "kind": "benign"}, {"id": "H-2", "text": "b", "benign": False, "kind": "misassociation"}]
     assert validate.ensure_baseline_hypotheses(hs) == [] and len(hs) == 2
+
+
+def test_openrouter_keys_alternate_and_skip_dead_key(tmp_path, monkeypatch):
+    import httpx
+    monkeypatch.setattr(providers, "CACHE_DIR", tmp_path / "cache")
+    seen = []
+
+    def handler(req: httpx.Request):
+        auth = req.headers.get("authorization", "")
+        seen.append(auth)
+        if auth.endswith("K2"):
+            return httpx.Response(429, text="slow down")
+        return httpx.Response(200, json={"choices": [{"message": {"content": '{"ok": 1}'}, "finish_reason": "stop"}],
+                                         "usage": {"prompt_tokens": 3, "completion_tokens": 2}})
+
+    ch = ProviderChain(None, openrouter_keys=["K1", "K2", "K3"], or_reader_models=["m/r"], or_planner_models=["m/p"],
+                       client=httpx.Client(transport=httpx.MockTransport(handler)), min_spacing=0, cache=False)
+    for i in range(4):
+        obj, usage = ch.generate_json("sys", [providers.text_part(f"hi{i}")])
+        assert obj == {"ok": 1} and usage["provider"] == "openrouter"
+    assert seen[0].endswith("K1")                       # first call uses key 1
+    assert any(a.endswith("K3") for a in seen)          # keys alternate
+    assert all("K2" not in str(u) for u in ch.calls)    # key never surfaces in usage records
