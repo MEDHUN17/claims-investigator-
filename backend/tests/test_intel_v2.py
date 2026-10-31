@@ -57,7 +57,7 @@ def test_roles_use_separate_model_chains(tmp_path, monkeypatch):
 
 def test_default_env_chains_and_extra_keys(monkeypatch):
     monkeypatch.setattr(providers, "_load_dotenv_once", lambda: None)
-    for k in ("GEMINI_MODELS", "GEMINI_READER_MODELS", "GEMINI_PLANNER_MODELS", "GROQ_API_KEY", "GEMINI_API_KEYS", "OPENROUTER_API_KEYS", "OPENROUTER_API_KEY"):
+    for k in ("GEMINI_MODELS", "GEMINI_READER_MODELS", "GEMINI_PLANNER_MODELS", "GROQ_API_KEY", "GEMINI_API_KEYS", "OPENROUTER_API_KEYS", "OPENROUTER_API_KEY", *[f"GEMINI_API_KEY_{i}" for i in range(2, 10)]):
         monkeypatch.delenv(k, raising=False)
     monkeypatch.setenv("GEMINI_API_KEY", "key-one")
     monkeypatch.setenv("GEMINI_API_KEY_2", "key-two")
@@ -519,7 +519,7 @@ def test_baseline_hypotheses_added_when_planner_omits_them(seq_case):
 
 
 def test_no_baseline_when_planner_already_supplied_both():
-    hs = [{"id": "H-1", "text": "a", "benign": True, "kind": "benign"}, {"id": "H-2", "text": "b", "benign": False, "kind": "misassociation"}]
+    hs = [{"id": "H-1", "text": "a", "benign": True, "kind": "benign"}, {"id": "H-2", "text": "b", "benign": False, "kind": "data_error"}]
     assert validate.ensure_baseline_hypotheses(hs) == [] and len(hs) == 2
 
 
