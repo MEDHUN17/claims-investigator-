@@ -21,6 +21,10 @@ _url: Optional[str] = None
 
 def _sa_url(base_uri: str, dbname: str) -> str:
     # base_uri like postgresql://postgres:@127.0.0.1:62488/postgres
+    # Linux socket form: postgresql://postgres:@/postgres?host=/tmp/xyz  (query string must be kept)
+    if "?" in base_uri:
+        main, query = base_uri.split("?", 1)
+        return main.rsplit("/", 1)[0].replace("postgresql://", "postgresql+psycopg://", 1) + "/" + dbname + "?" + query
     head = base_uri.rsplit("/", 1)[0]
     return head.replace("postgresql://", "postgresql+psycopg://", 1) + "/" + dbname
 

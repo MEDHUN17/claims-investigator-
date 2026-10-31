@@ -269,7 +269,7 @@ def ensure_baseline_hypotheses(hypotheses: list[dict]) -> list[str]:
     if not any(h.get("benign") for h in hypotheses):
         hypotheses.append({"id": nid(), "text": BASELINE_BENIGN, "benign": True, "kind": "benign", "inconsistencies": 0, "rank": 0, "covered_zones": ["all"]})
         added.append(hypotheses[-1]["id"])
-    if not any(h.get("kind") in ("data_error", "misassociation") for h in hypotheses):
+    if not any(h.get("kind") == "data_error" for h in hypotheses):
         hypotheses.append({"id": nid(), "text": BASELINE_DATA_ERROR, "benign": False, "kind": "data_error", "inconsistencies": 0, "rank": 0, "covered_zones": ["all"]})
         added.append(hypotheses[-1]["id"])
     return added
