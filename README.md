@@ -39,7 +39,7 @@ activated: `python -m pytest -q`.
 ## Presentation
 
 The pitch deck (product tour with real screenshots, technical architecture, Proof Lab results and likely
-judge questions) is at [`docs/presentation/Verity_presentation.pptx`](docs/presentation/Verity_presentation.pptx).
+judge questions) is at [`docs/presentation.pptx`](docs/presentation.pptx).
 
 ## Repository contents
 
