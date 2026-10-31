@@ -36,6 +36,11 @@ Use the environment's preview for port 8000. On Windows, build the frontend and
 use `run.bat` instead. Run backend tests from `backend` with the environment
 activated: `python -m pytest -q`.
 
+## Presentation
+
+The pitch deck (product tour with real screenshots, technical architecture, Proof Lab results and likely
+judge questions) is at [`docs/Verity_presentation.pptx`](docs/Verity_presentation.pptx).
+
 ## Repository contents
 
 Source code, tests, synthetic fixtures, documentation, and demo deck are included.
