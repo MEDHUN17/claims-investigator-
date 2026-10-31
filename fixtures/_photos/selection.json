@@ -1,0 +1,10 @@
+{
+  "front_a": {"file": "front2_6.png", "photoreal": true,
+    "observed": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."},
+  "front_b": {"file": "front2_3.png", "photoreal": true,
+    "observed": "A DIFFERENT silver hatchback (different street, taller body) from front-left three-quarter. FRONT damage: bonnet crushed and torn open, windscreen shattered, front bumper hanging and cracked, headlamp broken, debris scattered; a second car is visible far down the street. Sides and roof appear intact."},
+  "rear": {"file": "rear2_0.png", "photoreal": true,
+    "observed": "Silver hatchback seen from rear-left three-quarter. REAR damage: tailgate/boot lid bent and raised open, rear window shattered, debris on the road. The rear bumper and tail lamps look mostly intact and the plate is a garbled yellow rectangle (AI artefact). Front, doors and roof look intact. Damage is clearly at the rear but less crumpled than the front photos."},
+  "side": {"file": "side2_0.png", "photoreal": true,
+    "observed": "Silver hatchback in clean side profile (left side, front to the right) in a dark concrete alley. No visible dents, scratches or broken parts on doors, wheels, bumpers or glass. INTACT. AI artefact: rear of car is cropped at the left edge."}
+}

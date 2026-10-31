@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <!-- Liquid-logo input: opaque black shape on transparent. Ring + geometric V. -->
+  <circle cx="500" cy="500" r="440" fill="none" stroke="#000" stroke-width="64"/>
+  <polygon points="262,300 392,300 500,600 608,300 738,300 566,742 434,742" fill="#000"/>
+</svg>

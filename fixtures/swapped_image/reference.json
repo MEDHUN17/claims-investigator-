@@ -1,0 +1,4 @@
+{
+  "synthetic": true,
+  "note": "filename equality must never be used as identity; identity is the SHA-256 in the evidence record"
+}

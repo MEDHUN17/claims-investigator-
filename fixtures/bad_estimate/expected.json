@@ -1,0 +1,17 @@
+{
+  "calc.recomputed_total": "39900.00",
+  "calc.duplicates_min": 1,
+  "findings.types_include": [
+    "calc"
+  ],
+  "hypotheses.has_benign": true,
+  "injection_flags.min": 0,
+  "gates.all_pass": true,
+  "language.forbidden_absent": true,
+  "evidence.status": {
+    "policy.pdf": "extracted",
+    "claimant_statement.pdf": "extracted",
+    "estimate.pdf": "extracted",
+    "photo_front.jpg": "extracted"
+  }
+}

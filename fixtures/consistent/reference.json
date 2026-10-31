@@ -1,0 +1,90 @@
+{
+  "synthetic": true,
+  "policy": {
+    "idv": "650000",
+    "compulsory_deductible": "1000",
+    "voluntary_deductible": "2000",
+    "vehicle_age_months_at_loss": 30,
+    "metal_depreciation_rate": "0.35",
+    "plastic_depreciation_rate": "0.50"
+  },
+  "estimate_lines": [
+    {
+      "description": "Front bumper assembly",
+      "material": "plastic",
+      "category": "parts",
+      "qty": 1,
+      "unit": "6800",
+      "amount": "6800",
+      "depreciation_rate": "0.50",
+      "covered": true
+    },
+    {
+      "description": "Bonnet (hood) panel",
+      "material": "metal",
+      "category": "parts",
+      "qty": 1,
+      "unit": "9500",
+      "amount": "9500",
+      "depreciation_rate": "0.35",
+      "covered": true
+    },
+    {
+      "description": "Radiator grille",
+      "material": "plastic",
+      "category": "parts",
+      "qty": 1,
+      "unit": "1850",
+      "amount": "1850",
+      "depreciation_rate": "0.50",
+      "covered": true
+    },
+    {
+      "description": "Headlamp assembly LH",
+      "material": "plastic",
+      "category": "parts",
+      "qty": 1,
+      "unit": "4200",
+      "amount": "4200",
+      "depreciation_rate": "0.50",
+      "covered": true
+    },
+    {
+      "description": "Panel beating and fitting labour (11 h)",
+      "material": "-",
+      "category": "labour",
+      "qty": 11,
+      "unit": "500",
+      "amount": "5500",
+      "depreciation_rate": "0",
+      "covered": true
+    },
+    {
+      "description": "Painting - bonnet and front bumper",
+      "material": "-",
+      "category": "paint",
+      "qty": 1,
+      "unit": "7200",
+      "amount": "7200",
+      "depreciation_rate": "0",
+      "covered": true
+    },
+    {
+      "description": "Consumables (engine oil, coolant top-up)",
+      "material": "consumable",
+      "category": "parts",
+      "qty": 1,
+      "unit": "650",
+      "amount": "650",
+      "depreciation_rate": "0",
+      "covered": false
+    }
+  ],
+  "printed_total": "35700",
+  "non_covered": "650",
+  "covered_loss": "35050",
+  "depreciation": "9750.00",
+  "deductible": "3000",
+  "settlement": "22300.00",
+  "formula": "covered (excl. consumables) - depreciation on parts - (1000+2000), capped at IDV"
+}

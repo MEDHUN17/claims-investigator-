@@ -1,0 +1,15 @@
+{
+  "calc.recomputed_total": "35700.00",
+  "calc.proposed_settlement": "22300.00",
+  "hypotheses.has_benign": true,
+  "zones.mismatch": false,
+  "injection_flags.min": 0,
+  "gates.all_pass": true,
+  "language.forbidden_absent": true,
+  "evidence.status": {
+    "policy.pdf": "extracted",
+    "claimant_statement.pdf": "extracted",
+    "estimate.pdf": "extracted",
+    "photo_front_noexif.jpg": "extracted"
+  }
+}

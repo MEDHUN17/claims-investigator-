@@ -1,0 +1,15 @@
+{
+  "calc.recomputed_total": "35700.00",
+  "calc.proposed_settlement": null,
+  "requests.min_open": 1,
+  "unresolved.contains_term": "depreciation",
+  "hypotheses.has_benign": true,
+  "gates.all_pass": true,
+  "language.forbidden_absent": true,
+  "evidence.status": {
+    "policy_pages_1_and_3.pdf": "extracted",
+    "claimant_statement.pdf": "extracted",
+    "estimate.pdf": "extracted",
+    "photo_front.jpg": "extracted"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "delta.stale_min": 1,
+  "delta.added_min": 1,
+  "approval.void_after_new_evidence": true,
+  "zones.mismatch": false,
+  "hypotheses.has_benign": true,
+  "calc.recomputed_total": "35700.00",
+  "gates.all_pass": true,
+  "language.forbidden_absent": true,
+  "evidence.status": {
+    "witness_statement.txt": "extracted",
+    "garage_report.pdf": "extracted",
+    "photo_rear.jpg": "extracted",
+    "photo_side.jpg": "extracted"
+  }
+}

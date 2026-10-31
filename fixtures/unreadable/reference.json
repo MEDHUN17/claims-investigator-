@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "corrupt_file": "estimate.pdf",
+  "reason": "truncated object stream, no xref table, no %%EOF"
+}

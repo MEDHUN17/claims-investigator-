@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "intended_effect": "H-secondary-event (benign chain collision) becomes best supported; the rear-vs-front discrepancy finding goes stale and re-resolves; the earlier approval (if any) is void",
+  "claimant_first_statement_omitted": "being pushed forward into the vehicle ahead"
+}

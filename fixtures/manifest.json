@@ -1,0 +1,148 @@
+{
+  "synthetic": true,
+  "photos_generated_with": "local ComfyUI, Realistic_Vision_V5.1_fp16-no-ema (SD1.5), 640x480, text-to-image; every image was inspected by eye and the 'visual_ground_truth' below is what it ACTUALLY shows, not the prompt",
+  "photoreal": true,
+  "photo_roles": {
+    "front_a": {
+      "file": "front2_6.png",
+      "photoreal": true,
+      "observed": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "front_b": {
+      "file": "front2_3.png",
+      "photoreal": true,
+      "observed": "A DIFFERENT silver hatchback (different street, taller body) from front-left three-quarter. FRONT damage: bonnet crushed and torn open, windscreen shattered, front bumper hanging and cracked, headlamp broken, debris scattered; a second car is visible far down the street. Sides and roof appear intact."
+    },
+    "rear": {
+      "file": "rear2_0.png",
+      "photoreal": true,
+      "observed": "Silver hatchback seen from rear-left three-quarter. REAR damage: tailgate/boot lid bent and raised open, rear window shattered, debris on the road. The rear bumper and tail lamps look mostly intact and the plate is a garbled yellow rectangle (AI artefact). Front, doors and roof look intact. Damage is clearly at the rear but less crumpled than the front photos."
+    },
+    "side": {
+      "file": "side2_0.png",
+      "photoreal": true,
+      "observed": "Silver hatchback in clean side profile (left side, front to the right) in a dark concrete alley. No visible dents, scratches or broken parts on doors, wheels, bumpers or glass. INTACT. AI artefact: rear of car is cropped at the left edge."
+    }
+  },
+  "photos_in_sets": {
+    "consistent/photo_front.jpg": {
+      "role": "front_a",
+      "source_candidate": "front2_6.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "rear_vs_front/photo_front.jpg": {
+      "role": "front_a",
+      "source_candidate": "front2_6.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "twist_secondary_impact/photo_rear.jpg": {
+      "role": "rear",
+      "source_candidate": "rear2_0.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback seen from rear-left three-quarter. REAR damage: tailgate/boot lid bent and raised open, rear window shattered, debris on the road. The rear bumper and tail lamps look mostly intact and the plate is a garbled yellow rectangle (AI artefact). Front, doors and roof look intact. Damage is clearly at the rear but less crumpled than the front photos."
+    },
+    "twist_secondary_impact/photo_side.jpg": {
+      "role": "side",
+      "source_candidate": "side2_0.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback in clean side profile (left side, front to the right) in a dark concrete alley. No visible dents, scratches or broken parts on doors, wheels, bumpers or glass. INTACT. AI artefact: rear of car is cropped at the left edge."
+    },
+    "bad_estimate/photo_front.jpg": {
+      "role": "front_a",
+      "source_candidate": "front2_6.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "missing_policy_page/photo_front.jpg": {
+      "role": "front_a",
+      "source_candidate": "front2_6.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "no_exif/photo_front_noexif.jpg": {
+      "role": "front_a",
+      "source_candidate": "front2_6.png",
+      "exif_present": false,
+      "visual_ground_truth": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "poison_pill/photo_front.jpg": {
+      "role": "front_a",
+      "source_candidate": "front2_6.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "unreadable/photo_front.jpg": {
+      "role": "front_a",
+      "source_candidate": "front2_6.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "scanned_estimate/photo_front.jpg": {
+      "role": "front_a",
+      "source_candidate": "front2_6.png",
+      "exif_present": true,
+      "visual_ground_truth": "Silver hatchback seen from front-left three-quarter on a wet street. FRONT damage: bonnet buckled and crumpled upward exposing the engine bay, front bumper cracked and sagging, left headlamp area scuffed, windscreen dirty/cracked, debris pieces on the road. Doors, roof and rear look intact. No readable plate. AI artefacts: wheel and mirror shapes slightly off."
+    },
+    "swapped_image/photo_front.jpg": {
+      "role": "front_b",
+      "source_candidate": "front2_3.png",
+      "exif_present": true,
+      "visual_ground_truth": "A DIFFERENT silver hatchback (different street, taller body) from front-left three-quarter. FRONT damage: bonnet crushed and torn open, windscreen shattered, front bumper hanging and cracked, headlamp broken, debris scattered; a second car is visible far down the street. Sides and roof appear intact."
+    }
+  },
+  "sha256": {
+    "consistent/policy.pdf": "415e87bf403d143c600545afe17710519453ba76ce008f03ee604fc83e6d610e",
+    "consistent/claimant_statement.pdf": "865523883a8de5bd1bceed48dcb4c730ae986ce39d0f9169d471d9377050de1a",
+    "consistent/estimate.pdf": "c0b844297d74c5ad16a1896f38e3d6fb1f5f44d85bc093f8c54b1db8922e550b",
+    "consistent/photo_front.jpg": "caadd973bf5f380b67322e65a0b730e6859d5e31cbd321d99ccb4240b769b17d",
+    "rear_vs_front/policy.pdf": "415e87bf403d143c600545afe17710519453ba76ce008f03ee604fc83e6d610e",
+    "rear_vs_front/claimant_statement.pdf": "63a3ed44176beeab69209a86af35dae49672fa68cc89ade10e244327d49ddf30",
+    "rear_vs_front/estimate.pdf": "c0b844297d74c5ad16a1896f38e3d6fb1f5f44d85bc093f8c54b1db8922e550b",
+    "rear_vs_front/photo_front.jpg": "caadd973bf5f380b67322e65a0b730e6859d5e31cbd321d99ccb4240b769b17d",
+    "twist_secondary_impact/witness_statement.txt": "8dd9b925c648d198e9632d78ab39cbdafbc0f65851eda5eb85e0cf294cb13462",
+    "twist_secondary_impact/garage_report.pdf": "232d1b16f60cbac6797c275cf9ed799a3169a87d543a2de2793d32fb9a325369",
+    "twist_secondary_impact/photo_rear.jpg": "12ebf8b310d3f6beb4984c208b745372aa940b7c09f0bc490f0282f5828ce4c4",
+    "twist_secondary_impact/photo_side.jpg": "131a1511e7acc3c22a63bd611695fe9d235c757cbe1221dbdfffe1c0c7bef5d3",
+    "bad_estimate/policy.pdf": "415e87bf403d143c600545afe17710519453ba76ce008f03ee604fc83e6d610e",
+    "bad_estimate/claimant_statement.pdf": "865523883a8de5bd1bceed48dcb4c730ae986ce39d0f9169d471d9377050de1a",
+    "bad_estimate/estimate.pdf": "c9d6cc8186288da4231e4a60e4d7a48ea7d3609b6f383468a42814a32f1358ce",
+    "bad_estimate/photo_front.jpg": "caadd973bf5f380b67322e65a0b730e6859d5e31cbd321d99ccb4240b769b17d",
+    "missing_policy_page/policy_pages_1_and_3.pdf": "c8acccfffa9a1dd70884479feb33898add676005c6e58fa1fb15604314b8bb17",
+    "missing_policy_page/claimant_statement.pdf": "865523883a8de5bd1bceed48dcb4c730ae986ce39d0f9169d471d9377050de1a",
+    "missing_policy_page/estimate.pdf": "c0b844297d74c5ad16a1896f38e3d6fb1f5f44d85bc093f8c54b1db8922e550b",
+    "missing_policy_page/photo_front.jpg": "caadd973bf5f380b67322e65a0b730e6859d5e31cbd321d99ccb4240b769b17d",
+    "no_exif/policy.pdf": "415e87bf403d143c600545afe17710519453ba76ce008f03ee604fc83e6d610e",
+    "no_exif/claimant_statement.pdf": "865523883a8de5bd1bceed48dcb4c730ae986ce39d0f9169d471d9377050de1a",
+    "no_exif/estimate.pdf": "c0b844297d74c5ad16a1896f38e3d6fb1f5f44d85bc093f8c54b1db8922e550b",
+    "no_exif/photo_front_noexif.jpg": "790c16064b407f627c9991c7e7b4f994f928afc8bfe1f2ec534d8f72d8bc0bc8",
+    "poison_pill/policy.pdf": "415e87bf403d143c600545afe17710519453ba76ce008f03ee604fc83e6d610e",
+    "poison_pill/claimant_statement.pdf": "99426d551ca8955aab86a23cf7a46a7ea0f311e2b876a735ddec4cfdc8cbef45",
+    "poison_pill/estimate.pdf": "c0b844297d74c5ad16a1896f38e3d6fb1f5f44d85bc093f8c54b1db8922e550b",
+    "poison_pill/photo_front.jpg": "caadd973bf5f380b67322e65a0b730e6859d5e31cbd321d99ccb4240b769b17d",
+    "unreadable/policy.pdf": "415e87bf403d143c600545afe17710519453ba76ce008f03ee604fc83e6d610e",
+    "unreadable/claimant_statement.pdf": "865523883a8de5bd1bceed48dcb4c730ae986ce39d0f9169d471d9377050de1a",
+    "unreadable/estimate.pdf": "734e1e68ad0dc03ce2229be5ca893ef3d5392747ef337bf4f3348af1e4ef800b",
+    "unreadable/photo_front.jpg": "caadd973bf5f380b67322e65a0b730e6859d5e31cbd321d99ccb4240b769b17d",
+    "scanned_estimate/policy.pdf": "415e87bf403d143c600545afe17710519453ba76ce008f03ee604fc83e6d610e",
+    "scanned_estimate/claimant_statement.pdf": "865523883a8de5bd1bceed48dcb4c730ae986ce39d0f9169d471d9377050de1a",
+    "scanned_estimate/estimate_scan.pdf": "225846ed02fd5baeb4585429f6f7f02103cd4ef1a71566ed00853a358f242e33",
+    "scanned_estimate/photo_front.jpg": "caadd973bf5f380b67322e65a0b730e6859d5e31cbd321d99ccb4240b769b17d",
+    "swapped_image/photo_front.jpg": "2756fa9436de83e36f4260bb6ce7a3b10a7e46859fb20f5cce5ccd7b03445fa7"
+  },
+  "settlement_terms": {
+    "idv": "650000",
+    "compulsory_deductible": "1000",
+    "voluntary_deductible": "2000",
+    "vehicle_age_months_at_loss": 30,
+    "metal_depreciation_rate": "0.35",
+    "plastic_depreciation_rate": "0.50"
+  },
+  "expected_values": {
+    "consistent_settlement": "22300.00",
+    "consistent_total": "35700.00",
+    "bad_estimate_total": "39900.00",
+    "bad_estimate_stated_total": "38500.00"
+  }
+}

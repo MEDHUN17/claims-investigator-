@@ -1,0 +1,13 @@
+{
+  "evidence.status": {
+    "policy.pdf": "extracted",
+    "claimant_statement.pdf": "extracted",
+    "estimate.pdf": "failed",
+    "photo_front.jpg": "extracted"
+  },
+  "calc.proposed_settlement": null,
+  "requests.min_open": 1,
+  "hypotheses.has_benign": true,
+  "gates.all_pass": true,
+  "language.forbidden_absent": true
+}
