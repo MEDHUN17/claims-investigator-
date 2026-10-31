@@ -19,3 +19,10 @@ IDV cap; compulsory + voluntary deductible; depreciation by material (rubber/pla
 ## Demo path (3 minutes)
 1. Queue -> Load demo case "rear-strike vs front damage" (~1 min). 2. Evidence desk: original beside facts with receipts. 3. Investigation: Hypothesis Board (benign explanation present), ranked next-evidence request, blueprint rings show the rear-vs-front mismatch. 4. Review: waterfall, Approve (sealed to the revision hash). 5. Drop `fixtures/twist_secondary_impact/garage_report.pdf` (and witness_statement.txt): only dependants go stale, cited diff, request scored, approval flips to VOID. 6. Proof Lab: gates on this upload.
 Reset: `POST /api/demo/reset` (deletes only demo-flagged cases).
+
+## Cloud session update (31 Oct)
+Verified on Linux: `pytest` 78 passed; API starts (bundled PostgreSQL 16 via the Linux `pixeltable-pgserver` wheel, UI built with `npm run build`); `/api/health` reports 5 OpenRouter keys and the model chain.
+Changes: `providers.py` has an OpenRouter provider (OpenAI-compatible, image input, keys rotate round-robin per call; 401/402/429 moves to the next key), configured by `OPENROUTER_API_KEYS` (comma-separated) in `backend/.env`; Gemini is only used if a Gemini key is set. `db.py` handles the Linux unix-socket DB URL. Baseline benign/data-error hypotheses and the lab evaluator fix were already in place and are covered by tests.
+NOT verified: any live AI call, `scripts/e2e_check.py`, the Proof Lab (`scripts/run_lab.py`), VERIFICATION.md, slide 4 numbers, UI polish. Reason: the cloud sandbox network policy returns HTTP 403 on CONNECT for `openrouter.ai` (re-checked, still blocked), so no model could be reached. Allow that host in the environment's Network access settings, then run `python scripts/e2e_check.py` and `python scripts/run_lab.py <scenario>`.
+OpenRouter model ids (`OPENROUTER_READER_MODELS` / `OPENROUTER_PLANNER_MODELS`) are defaults and untested against the live API.
+SECURITY: the OpenRouter keys were pasted into chat. Rotate them and delete `backend/.env` before sharing.
